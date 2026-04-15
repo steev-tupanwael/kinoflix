@@ -87,7 +87,7 @@ export default function HomePage() {
 
       {/* Hero Section (Simple) */}
       <section className="relative h-[60vh] flex items-center px-6 md:px-12 pt-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/60 to-transparent z-10" />
+        <div className="absolute inset-0 bg-linear-to-r from-black via-black/60 to-transparent z-10" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070')] bg-cover bg-center opacity-40" />
 
         <div className="relative z-20 max-w-2xl">
