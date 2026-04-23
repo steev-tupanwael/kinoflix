@@ -12,15 +12,15 @@ export async function createSession(idToken: string, userData?: { name: string, 
   const uid = decodeToken.uid
 
   if (decodeToken) {
-  const adminEmails = ['steev_tupanwael@outlook.com'];
-  const userEmail = decodeToken.email; // string | undefined
+    const adminEmails = ['steev_tupanwael@outlook.com'];
+    const userEmail = decodeToken.email; // string | undefined
 
-  // Pastikan userEmail ada DAN termasuk dalam daftar adminEmails
-  if (userEmail && adminEmails.includes(userEmail)) {
-    // Setel klaim admin di Firebase
-    await adminAuth.setCustomUserClaims(decodeToken.uid, { admin: true });
+    // Pastikan userEmail ada DAN termasuk dalam daftar adminEmails
+    if (userEmail && adminEmails.includes(userEmail)) {
+      // Setel klaim admin di Firebase
+      await adminAuth.setCustomUserClaims(decodeToken.uid, { admin: true });
+    }
   }
-}
 
   // 2. Ambil data dari Firestore
   const userRef = adminDb.collection('users').doc(uid)

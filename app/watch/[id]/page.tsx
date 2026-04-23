@@ -77,17 +77,28 @@ export default function WatchPage() {
             return;
           }
 
-          const result = await getAuthorizedMovieUrl(auth.currentUser.uid, movieId);
-          if (result.url) {
-            setVideoSrc(result.url);
-            setErrorType(null);
+          // AMBIL DATA USER DARI FIRESTORE UNTUK CEK PREMIUMUNTIL
+          const userRef = doc(db, "users", auth.currentUser.uid);
+          const userSnap = await getDoc(userRef);
+          const userData = userSnap.data();
+
+          const now = new Date();
+          // Cek apakah premiumUntil masih berlaku (Firebase Timestamp ke JS Date)
+          const isPremiumValid = userData?.premiumUntil?.toDate() > now;
+
+          if (isPremiumValid) {
+            const result = await getAuthorizedMovieUrl(auth.currentUser.uid, movieId);
+            if (result.url) {
+              setVideoSrc(result.url);
+              setErrorType(null);
+            } else {
+              setErrorType("PAYMENT");
+            }
           } else {
-            setErrorType("PAYMENT");
+            setErrorType("PAYMENT"); // Arahkan ke upgrade jika sudah expired atau bukan premium
           }
-        } else {
-          setVideoSrc(movieData.videoUrl);
-          setErrorType(null);
         }
+
       } catch (error) {
         console.error("WatchPage Error:", error);
       } finally {
@@ -183,12 +194,12 @@ export default function WatchPage() {
       <main className="flex-1 px-4 md:px-12 pt-10 pb-32">
         {/* Konten detail film sama seperti sebelumnya... */}
         <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 px-4 md:px-8">
-            <div className="lg:col-span-2 space-y-8">
-                 <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.9]">
-                   {movie?.title}
-                 </h1>
-                 <p className="text-zinc-400 text-lg md:text-xl leading-relaxed">{movie?.description}</p>
-            </div>
+          <div className="lg:col-span-2 space-y-8">
+            <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.9]">
+              {movie?.title}
+            </h1>
+            <p className="text-zinc-400 text-lg md:text-xl leading-relaxed">{movie?.description}</p>
+          </div>
         </div>
       </main>
 

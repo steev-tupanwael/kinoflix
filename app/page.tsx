@@ -26,7 +26,7 @@ export default function HomePage() {
 
   useEffect(() => {
     async function fetchData() {
-      // Tunggu hingga auth selesai dicheck
+      // Tunggu hingga auth selesai dicheckpage
       if (authLoading) return;
 
       try {
@@ -79,8 +79,26 @@ export default function HomePage() {
               <i className="ri-flashlight-line"></i> Upgrade
             </Button>
           )}
-          <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700">
-            <i className="ri-user-3-line text-xl"></i>
+
+          {/* BAGIAN FOTO PROFIL */}
+          <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700 overflow-hidden">
+            {user?.photoURL ? (
+              <img
+                src={user.photoURL}
+                alt="Profile"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer" // Penting jika login via Google
+              />
+            ) : userData?.photoURL ? (
+              <img
+                src={userData.photoURL}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              // Fallback jika tidak ada foto
+              <i className="ri-user-3-line text-xl text-zinc-400"></i>
+            )}
           </div>
         </div>
       </nav>
